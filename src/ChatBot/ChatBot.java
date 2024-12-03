@@ -36,5 +36,29 @@ public class ChatBot {
         for (int i = 0; i <= userInp; i++) {
             System.out.println(i + "!");
         }
+
+
+        System.out.println("Now, let's test your knowledge of programming!");
+
+        boolean correctAnswer = false;
+
+        while (!correctAnswer) {
+            System.out.println("What is the main purpose of the 'main' method in Java?");
+            System.out.println("1. To define the starting point of the program.");
+            System.out.println("2. To create a new class.");
+            System.out.println("3. To execute mathematical calculations.");
+            System.out.println("4. To store data in a variable.");
+
+            int answer = scanner.nextInt();
+
+            if (answer == 1) {
+                correctAnswer = true;
+                System.out.println("Congratulations, you have completed the test!");
+            } else {
+                System.out.println("Please, try again.");
+            }
+        }
+
+        System.out.println("Goodbye, have a nice day!");
     }
 }

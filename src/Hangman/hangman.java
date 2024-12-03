@@ -15,17 +15,18 @@ public class hangman {
         }
 
         HashSet<Character> usedLetters = new HashSet<>();
-        int attemptsLeft = 8;
+        int mistakesLeft = 8;
+        boolean won = false;
 
         Scanner scanner = new Scanner(System.in);
 
-        while (attemptsLeft > 0) {
+        while (mistakesLeft > 0) {
             System.out.println(guessedWord);
             System.out.print("Input a letter: > ");
             char guess = scanner.next().charAt(0);
 
             if (usedLetters.contains(guess)) {
-                System.out.println("You already tried that letter.");
+                System.out.println("No improvements");
                 continue;
             }
 
@@ -39,24 +40,24 @@ public class hangman {
                 }
             }
 
-            if (found) {
-                if (String.valueOf(guessedWord).equals(secretWord)) {
-                    System.out.println(guessedWord);
-                    System.out.println("You survived!");
-                    break;
-                }
-            } else {
-                System.out.println("That letter doesn't appear in the word.");
-                attemptsLeft--;
+            if (!found) {
+                System.out.println("That letter doesn't appear in the word");
+                mistakesLeft--;
+            }
+
+            if (String.valueOf(guessedWord).equals(secretWord)) {
+                won = true;
+                break;
             }
         }
 
-        if (attemptsLeft == 0) {
+        if (won) {
+            System.out.println(secretWord);
+            System.out.println("You guessed the word!");
+            System.out.println("You survived!");
+        } else {
             System.out.println("You lost!");
         }
-
-        System.out.println("Thanks for playing!");
-        System.out.println("We'll see how well you did in the next stage.");
 
         scanner.close();
     }

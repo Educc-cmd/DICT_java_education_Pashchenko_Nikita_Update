@@ -4,7 +4,23 @@ import java.util.Scanner;
 
 public class hangman {
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
         System.out.println("HANGMAN");
+
+        while (true) {
+            System.out.print("Type \"play\" to play the game, \"exit\" to quit: > ");
+            String command = scanner.next();
+
+            if (command.equals("play")) {
+                playGame(scanner);
+            } else if (command.equals("exit")) {
+                break;
+            }
+        }
+        scanner.close();
+    }
+
+    private static void playGame(Scanner scanner) {
         String[] words = {"python", "java", "javascript", "kotlin"};
         Random random = new Random();
         String secretWord = words[random.nextInt(words.length)];
@@ -18,8 +34,6 @@ public class hangman {
         int mistakesLeft = 8;
         boolean won = false;
 
-        Scanner scanner = new Scanner(System.in);
-
         while (mistakesLeft > 0) {
             System.out.println(guessedWord);
             System.out.print("Input a letter: > ");
@@ -32,7 +46,6 @@ public class hangman {
 
             char guess = input.charAt(0);
 
-            // Перевірка на малу англійську літеру
             if (!Character.isLowerCase(guess) || !Character.isAlphabetic(guess)) {
                 System.out.println("Please enter a lowercase English letter");
                 continue;
@@ -70,7 +83,5 @@ public class hangman {
         } else {
             System.out.println("You lost!");
         }
-
-        scanner.close();
     }
 }

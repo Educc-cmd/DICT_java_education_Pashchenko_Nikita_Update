@@ -16,14 +16,7 @@ public class CoffeeMachine {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
-            System.out.println("Кавомашина має:");
-            System.out.println(water + " мл води");
-            System.out.println(milk + " мл молока");
-            System.out.println(coffeeBeans + " г кавових зерен");
-            System.out.println(disposableCups + " одноразових стаканчиків");
-            System.out.println(money + " грн");
-
-            System.out.println("Виберіть дію (buy, fill, take):");
+            System.out.println("Введіть дію (buy, fill, take, remaining, exit):");
             String action = scanner.nextLine();
 
             if (action.equals("buy")) {
@@ -32,13 +25,22 @@ public class CoffeeMachine {
                 fillMachine(scanner);
             } else if (action.equals("take")) {
                 takeMoney();
+            } else if (action.equals("remaining")) {
+                showRemaining();
+            } else if (action.equals("exit")) {
+                System.out.println("Кавоварка вимикається...");
+                break;
             }
         }
     }
 
     public void buyCoffee(Scanner scanner) {
-        System.out.println("Що ви хочете купити? 1 - еспресо, 2 - лате, 3 - капучино:");
-        int coffeeChoice = Integer.parseInt(scanner.nextLine());
+        System.out.println("Що ви хочете купити? 1 - еспресо, 2 - лате, 3 - капучино, back – повернутися до головного меню:");
+        String coffeeChoice = scanner.nextLine();
+
+        if (coffeeChoice.equals("back")) {
+            return;
+        }
 
         int requiredWater = 0;
         int requiredMilk = 0;
@@ -46,23 +48,26 @@ public class CoffeeMachine {
         int price = 0;
 
         switch (coffeeChoice) {
-            case 1: // еспресо
+            case "1": // еспресо
                 requiredWater = 250;
                 requiredBeans = 16;
                 price = 4;
                 break;
-            case 2: // лате
+            case "2": // лате
                 requiredWater = 350;
                 requiredMilk = 75;
                 requiredBeans = 20;
                 price = 7;
                 break;
-            case 3: // капучино
+            case "3": // капучино
                 requiredWater = 200;
                 requiredMilk = 100;
                 requiredBeans = 12;
                 price = 6;
                 break;
+            default:
+                System.out.println("Невірний вибір, виберіть 1, 2, 3 або back.");
+                return;
         }
 
         if (water >= requiredWater && milk >= requiredMilk && coffeeBeans >= requiredBeans && disposableCups > 0) {
@@ -72,19 +77,19 @@ public class CoffeeMachine {
             disposableCups--;
             money += price;
 
-            System.out.println("Ваша кава готова! Ви купили каву за " + price + " грн.");
+            System.out.println("У мене є достатньо ресурсів, роблю вам каву!");
         } else {
             if (water < requiredWater) {
-                System.out.println("Перепрошую, недостатньо води!");
+                System.out.println("Вибачте, недостатньо води!");
             }
             if (milk < requiredMilk) {
-                System.out.println("Перепрошую, недостатньо молока!");
+                System.out.println("Вибачте, недостатньо молока!");
             }
             if (coffeeBeans < requiredBeans) {
-                System.out.println("Перепрошую, недостатньо кавових зерен!");
+                System.out.println("Вибачте, недостатньо кавових зерен!");
             }
             if (disposableCups <= 0) {
-                System.out.println("Перепрошую, недостатньо одноразових стаканчиків!");
+                System.out.println("Вибачте, недостатньо одноразових стаканчиків!");
             }
         }
     }
@@ -102,11 +107,20 @@ public class CoffeeMachine {
         System.out.println("Скільки одноразових стаканчиків ви хочете додати?");
         disposableCups += Integer.parseInt(scanner.nextLine());
 
-        System.out.println("Запаси оновлені.");
+        System.out.println("Запаси оновлено.");
     }
 
     public void takeMoney() {
-        System.out.println("Я вручив вам " + money + " грн");
+        System.out.println("Я дав вам " + money);
         money = 0;
+    }
+
+    public void showRemaining() {
+        System.out.println("Кавоварка має:");
+        System.out.println(water + " мл води");
+        System.out.println(milk + " мл молока");
+        System.out.println(coffeeBeans + " г кавових зерен");
+        System.out.println(disposableCups + " одноразових стаканчиків");
+        System.out.println(money + " грн");
     }
 }

@@ -1,44 +1,71 @@
 import java.util.Scanner;
 
 public class CoffeeMachine {
-    private static int water = 400;
-    private static int milk = 540;
-    private static int coffeeBeans = 120;
-    private static int disposableCups = 9;
-    private static int money = 550;
+    private enum State {
+        MAIN_MENU, CHOOSE_COFFEE, FILL_MACHINE
+    }
+
+    private State state = State.MAIN_MENU;
+
+    private int water = 400;
+    private int milk = 540;
+    private int coffeeBeans = 120;
+    private int disposableCups = 9;
+    private int money = 550;
 
     public static void main(String[] args) {
         CoffeeMachine coffeeMachine = new CoffeeMachine();
-        coffeeMachine.run();
-    }
-
-    public void run() {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
             System.out.println("Введіть дію (buy, fill, take, remaining, exit):");
-            String action = scanner.nextLine();
-
-            if (action.equals("buy")) {
-                buyCoffee(scanner);
-            } else if (action.equals("fill")) {
-                fillMachine(scanner);
-            } else if (action.equals("take")) {
-                takeMoney();
-            } else if (action.equals("remaining")) {
-                showRemaining();
-            } else if (action.equals("exit")) {
-                System.out.println("Кавоварка вимикається...");
-                break;
-            }
+            String input = scanner.nextLine();
+            coffeeMachine.processInput(input);
         }
     }
 
-    public void buyCoffee(Scanner scanner) {
-        System.out.println("Що ви хочете купити? 1 - еспресо, 2 - лате, 3 - капучино, back – повернутися до головного меню:");
-        String coffeeChoice = scanner.nextLine();
+    public void processInput(String input) {
+        switch (state) {
+            case MAIN_MENU:
+                handleMainMenu(input);
+                break;
+            case CHOOSE_COFFEE:
+                handleChooseCoffee(input);
+                break;
+            case FILL_MACHINE:
+                handleFillMachine(input);
+                break;
+        }
+    }
 
-        if (coffeeChoice.equals("back")) {
+    private void handleMainMenu(String input) {
+        switch (input) {
+            case "buy":
+                state = State.CHOOSE_COFFEE;
+                System.out.println("Що ви хочете купити? 1 - еспресо, 2 - лате, 3 - капучино, back – повернутися до головного меню:");
+                break;
+            case "fill":
+                state = State.FILL_MACHINE;
+                System.out.println("Скільки мл води ви хочете додати?");
+                break;
+            case "take":
+                takeMoney();
+                break;
+            case "remaining":
+                showRemaining();
+                break;
+            case "exit":
+                System.out.println("Кавоварка вимикається...");
+                System.exit(0);
+                break;
+            default:
+                System.out.println("Невірна команда. Спробуйте ще раз.");
+        }
+    }
+
+    private void handleChooseCoffee(String input) {
+        if (input.equals("back")) {
+            state = State.MAIN_MENU;
             return;
         }
 
@@ -47,7 +74,7 @@ public class CoffeeMachine {
         int requiredBeans = 0;
         int price = 0;
 
-        switch (coffeeChoice) {
+        switch (input) {
             case "1": // еспресо
                 requiredWater = 250;
                 requiredBeans = 16;
@@ -92,30 +119,27 @@ public class CoffeeMachine {
                 System.out.println("Вибачте, недостатньо одноразових стаканчиків!");
             }
         }
+
+        state = State.MAIN_MENU;
     }
 
-    public void fillMachine(Scanner scanner) {
-        System.out.println("Скільки мл води ви хочете додати?");
-        water += Integer.parseInt(scanner.nextLine());
+    private void handleFillMachine(String input) {
+        if (water == 400) {
+            water += Integer.parseInt(input);
+            System.out.println("Скільки мл молока ви хочете додати?");
+            return;
+        }
 
-        System.out.println("Скільки мл молока ви хочете додати?");
-        milk += Integer.parseInt(scanner.nextLine());
-
+        milk += Integer.parseInt(input);
         System.out.println("Скільки грамів кавових зерен ви хочете додати?");
-        coffeeBeans += Integer.parseInt(scanner.nextLine());
-
-        System.out.println("Скільки одноразових стаканчиків ви хочете додати?");
-        disposableCups += Integer.parseInt(scanner.nextLine());
-
-        System.out.println("Запаси оновлено.");
     }
 
-    public void takeMoney() {
+    private void takeMoney() {
         System.out.println("Я дав вам " + money);
         money = 0;
     }
 
-    public void showRemaining() {
+    private void showRemaining() {
         System.out.println("Кавоварка має:");
         System.out.println(water + " мл води");
         System.out.println(milk + " мл молока");

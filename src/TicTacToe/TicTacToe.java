@@ -1,25 +1,25 @@
+import java.util.Scanner;
+
 public class TicTacToe {
-    private char[][] board;
-
-    public TicTacToe() {
-        board = new char[][]{
-                {'X', 'O', 'X'},
-                {'O', 'X', 'O'},
-                {'X', 'X', 'O'}
-        };
-    }
-
-    public void printBoard() {
-        for (char[] row : board) {
-            for (char cell : row) {
-                System.out.print(cell + " ");
-            }
-            System.out.println();
-        }
-    }
-
     public static void main(String[] args) {
-        TicTacToe gameBoard = new TicTacToe();
-        gameBoard.printBoard();
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Введіть комірки: ");
+        String input = scanner.nextLine();
+
+        if (input.length() != 9 || !input.matches("[XO_]+")) {
+            System.out.println("Некоректний ввід. Використовуйте лише символи 'X', 'O' та '_'.");
+            return;
+        }
+
+        System.out.println("---------");
+        for (int i = 0; i < 3; i++) {
+            System.out.print("| ");
+            for (int j = 0; j < 3; j++) {
+                System.out.print(input.charAt(i * 3 + j) + " ");
+            }
+            System.out.println("|");
+        }
+        System.out.println("---------");
     }
 }
